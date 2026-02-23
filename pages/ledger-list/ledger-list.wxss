@@ -1,0 +1,159 @@
+/* pages/ledger-list/ledger-list.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+/* 导航栏右侧按钮 */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.nav-icon {
+  font-size: 40rpx;
+}
+
+.ledger-list-container {
+  padding: 30rpx;
+}
+
+/* 账本列表 */
+.ledger-items {
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.ledger-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.ledger-item:last-child {
+  border-bottom: none;
+}
+
+.ledger-item.active {
+  background: #f5f7ff;
+}
+
+.ledger-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-right: 20rpx;
+}
+
+.ledger-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.ledger-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.ledger-desc {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.ledger-hint {
+  font-size: 24rpx;
+  color: #667eea;
+}
+
+.ledger-action {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.current-tag {
+  font-size: 24rpx;
+  color: #667eea;
+  padding: 4rpx 16rpx;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 20rpx;
+}
+
+.ledger-arrow {
+  font-size: 48rpx;
+  color: #ccc;
+}
+
+/* 空状态 */
+.empty-state {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 120rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.empty-btn {
+  margin-top: 30rpx;
+  padding: 24rpx 60rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 40rpx;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+/* 加载遮罩 */
+.loading-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.loading-text {
+  color: #fff;
+  font-size: 32rpx;
+}

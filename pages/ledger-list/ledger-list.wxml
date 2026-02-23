@@ -1,0 +1,47 @@
+<!-- pages/ledger-list/ledger-list.wxml -->
+<navigation-bar title="我的账本" back="{{true}}" color="black" background="#FFF">
+  <view slot="right" class="nav-right">
+    <text class="nav-icon" bindtap="createLedger">➕</text>
+  </view>
+</navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="ledger-list-container">
+    <!-- 账本列表 -->
+    <view class="ledger-items" wx:if="{{ledgers.length > 0}}">
+      <view
+        class="ledger-item {{item._id === currentLedgerId ? 'active' : ''}}"
+        wx:for="{{ledgers}}"
+        wx:key="_id"
+        bindtap="selectLedger"
+        data-id="{{item._id}}"
+      >
+        <view class="ledger-icon">{{item.name.charAt(0)}}</view>
+        <view class="ledger-info">
+          <text class="ledger-name">{{item.name}}</text>
+          <text class="ledger-desc" wx:if="{{item.description}}">{{item.description}}</text>
+          <text class="ledger-hint" wx:if="{{item._id === currentLedgerId}}">当前使用</text>
+        </view>
+        <view class="ledger-action">
+          <text class="current-tag" wx:if="{{item._id === currentLedgerId}}">当前</text>
+          <text class="ledger-arrow">›</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-icon">📒</text>
+      <text class="empty-text">暂无账本</text>
+      <text class="empty-hint">点击右上角"+"创建新账本</text>
+      <view class="empty-btn" bindtap="createLedger">
+        <text>创建账本</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 加载状态 -->
+<view class="loading-mask" wx:if="{{loading}}">
+  <text class="loading-text">加载中...</text>
+</view>
