@@ -1,7 +1,83 @@
-<!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<!-- pages/index/index.wxml -->
+<navigation-bar title="秒拍帐" back="{{false}}" color="black" background="#FFF">
+  <view slot="right" class="nav-right">
+    <text class="nav-icon" bindtap="goToStatistics">📊</text>
+    <text class="nav-icon" bindtap="goToProfile">👤</text>
+  </view>
+</navigation-bar>
+
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="container">
-    Weixin
+    <!-- 账本信息 -->
+    <view class="ledger-section" bindtap="switchLedger">
+      <view class="ledger-info">
+        <text class="ledger-icon">📒</text>
+        <view class="ledger-text">
+          <text class="ledger-name">{{currentLedger.name}}</text>
+          <text class="ledger-hint">点击切换账本</text>
+        </view>
+      </view>
+      <text class="ledger-arrow">›</text>
+    </view>
+
+    <!-- 总金额卡片 -->
+    <view class="total-card">
+      <text class="total-label">本月支出</text>
+      <text class="total-value">¥{{monthlyTotal}}</text>
+    </view>
+
+    <!-- 快捷操作 -->
+    <view class="quick-actions">
+      <view class="action-btn primary" bindtap="goToAddRecord">
+        <text class="action-icon">➕</text>
+        <text class="action-text">记一笔</text>
+      </view>
+    </view>
+
+    <!-- 最近记录 -->
+    <view class="recent-section">
+      <view class="section-header">
+        <text class="section-title">最近记录</text>
+        <text class="section-more" bindtap="goToRecordList">查看全部 ›</text>
+      </view>
+
+      <view class="record-list" wx:if="{{recentRecords.length > 0}}">
+        <view
+          class="record-item"
+          wx:for="{{recentRecords}}"
+          wx:key="_id"
+          bindtap="goToRecordDetail"
+          data-id="{{item._id}}"
+        >
+          <view class="record-left">
+            <text class="record-icon">{{item.categoryName}}</text>
+            <view class="record-info">
+              <text class="record-merchant">{{item.merchantName || '其他'}}</text>
+              <text class="record-time">{{formatDate(item.paymentTime)}}</text>
+            </view>
+          </view>
+          <view class="record-right">
+            <text class="record-amount">-¥{{item.amount.toFixed(2)}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:else>
+        <text class="empty-icon">📝</text>
+        <text class="empty-text">暂无记账记录</text>
+        <text class="empty-hint">点击"记一笔"开始记账</text>
+      </view>
+    </view>
   </view>
 </scroll-view>
+
+<!-- 悬浮记账按钮 -->
+<view class="fab-add" bindtap="goToAddRecord">
+  <text class="fab-icon">+</text>
+</view>
+
+<!-- 加载状态 -->
+<view class="loading-mask" wx:if="{{loading}}">
+  <text class="loading-text">加载中...</text>
+</view>
