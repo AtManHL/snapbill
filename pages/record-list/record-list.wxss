@@ -1,0 +1,182 @@
+/* pages/record-list/record-list.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.record-list-container {
+  padding: 30rpx;
+}
+
+/* 导航栏右侧按钮 */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.nav-icon {
+  font-size: 40rpx;
+}
+
+/* 搜索栏 */
+.search-bar {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.search-input {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 筛选标签 */
+.filter-tags {
+  display: flex;
+  white-space: nowrap;
+  padding-bottom: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.tag {
+  display: inline-block;
+  padding: 16rpx 32rpx;
+  background: #f5f5f5;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  color: #666;
+  margin-right: 20rpx;
+}
+
+.tag:last-child {
+  margin-right: 0;
+}
+
+.tag.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+/* 记录列表 */
+.record-list {
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.record-item:last-child {
+  border-bottom: none;
+}
+
+.record-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  flex: 1;
+}
+
+.record-icon {
+  font-size: 48rpx;
+  background: #f5f5f5;
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16rpx;
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  flex: 1;
+}
+
+.record-merchant {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.record-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.record-right {
+  text-align: right;
+}
+
+.record-amount {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+/* 空状态 */
+.empty-state {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 120rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #999;
+}
+
+/* 加载更多 */
+.load-more,
+.no-more {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.load-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 加载遮罩 */
+.loading-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.loading-text {
+  color: #fff;
+  font-size: 32rpx;
+}

@@ -1,0 +1,130 @@
+<!-- pages/record-detail/record-detail.wxml -->
+<navigation-bar title="记录详情" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="detail-container" wx:if="{{record}}">
+    <!-- 详情展示 -->
+    <view class="detail-section" wx:if="{{!editing}}">
+      <!-- 金额 -->
+      <view class="amount-section">
+        <text class="amount-value">{{formatAmount(record.amount)}}</text>
+        <text class="amount-label">支出</text>
+      </view>
+
+      <!-- 分类图标 -->
+      <view class="category-section">
+        <text class="category-icon" style="color: {{record.categoryColor}}">{{record.categoryIcon}}</text>
+        <text class="category-name">{{record.categoryName}}</text>
+      </view>
+
+      <!-- 信息列表 -->
+      <view class="info-list">
+        <view class="info-item">
+          <text class="info-label">支付时间</text>
+          <text class="info-value">{{formatDate(record.paymentTime)}}</text>
+        </view>
+        <view class="info-item" wx:if="{{record.merchantName}}">
+          <text class="info-label">商户名称</text>
+          <text class="info-value">{{record.merchantName}}</text>
+        </view>
+        <view class="info-item" wx:if="{{record.remark}}">
+          <text class="info-label">备注</text>
+          <text class="info-value">{{record.remark}}</text>
+        </view>
+      </view>
+
+      <!-- 截图预览 -->
+      <view class="image-section" wx:if="{{record.thumbnailUrl}}" bindtap="previewImage">
+        <image class="thumbnail" src="{{record.thumbnailUrl}}" mode="aspectFill"></image>
+        <text class="image-hint">点击查看大图</text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="action-buttons">
+        <view class="action-btn edit" bindtap="startEdit">
+          <text class="action-icon">✏️</text>
+          <text>编辑</text>
+        </view>
+        <view class="action-btn delete" bindtap="deleteRecord">
+          <text class="action-icon">🗑️</text>
+          <text>删除</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 编辑表单 -->
+    <view class="edit-section" wx:if="{{editing}}">
+      <view class="form-title">编辑记录</view>
+
+      <view class="form-item">
+        <text class="form-label">金额 *</text>
+        <input
+          class="form-input"
+          type="digit"
+          value="{{editData.amount}}"
+          bindinput="onEditAmountChange"
+          placeholder="请输入金额"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">时间 *</text>
+        <picker
+          mode="multiSelector"
+          range="{{[dateRange, timeRange]}}"
+          value="{{editData.categoryIndex}}"
+          bindchange="onEditTimeChange"
+        >
+          <view class="form-input-picker">{{formatDate(editData.paymentTime)}}</view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">分类 *</text>
+        <picker
+          mode="selector"
+          range="{{categories}}"
+          range-key="name"
+          value="{{editData.categoryIndex}}"
+          bindchange="onEditCategoryChange"
+        >
+          <view class="form-input-picker">
+            <text class="category-icon" style="color: {{editData.categoryColor}}">{{editData.categoryIcon}}</text>
+            <text>{{editData.categoryName}}</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">商户</text>
+        <input
+          class="form-input"
+          value="{{editData.merchantName}}"
+          bindinput="onEditMerchantChange"
+          placeholder="商户名称（选填）"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="form-label">备注</text>
+        <input
+          class="form-input"
+          value="{{editData.remark}}"
+          bindinput="onEditRemarkChange"
+          placeholder="备注（选填）"
+        />
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="edit-actions">
+        <view class="btn btn-cancel" bindtap="cancelEdit">取消</view>
+        <view class="btn btn-confirm" bindtap="saveEdit">保存</view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 加载状态 -->
+<view class="loading-mask" wx:if="{{loading}}">
+  <text class="loading-text">加载中...</text>
+</view>
