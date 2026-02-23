@@ -1,0 +1,262 @@
+/* pages/add-record/add-record.wxss */
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.add-record-container {
+  padding: 30rpx;
+}
+
+/* 上传区域 */
+.upload-section {
+  margin-bottom: 30rpx;
+}
+
+.upload-box {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 60rpx 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  border: 2rpx dashed #ddd;
+}
+
+.upload-icon {
+  font-size: 80rpx;
+}
+
+.upload-text {
+  font-size: 32rpx;
+  color: #333;
+}
+
+.upload-hint {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.preview-image {
+  width: 400rpx;
+  height: 400rpx;
+  border-radius: 16rpx;
+}
+
+.reupload-btn {
+  margin-top: 20rpx;
+  padding: 16rpx 32rpx;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 40rpx;
+  color: #fff;
+  font-size: 24rpx;
+}
+
+/* 上传方式切换 */
+.upload-mode-switch {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.mode-item {
+  flex: 1;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.mode-item.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.mode-item.active .mode-text {
+  color: #fff;
+}
+
+.mode-icon {
+  font-size: 36rpx;
+}
+
+.mode-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 识别结果 */
+.result-section {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.result-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.result-tag {
+  font-size: 24rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 8rpx 20rpx;
+  border-radius: 20rpx;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-label {
+  width: 120rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.result-input {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.amount-input {
+  font-weight: 600;
+  font-size: 40rpx;
+}
+
+.category-input {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.category-icon {
+  font-size: 36rpx;
+}
+
+.picker-arrow {
+  color: #ccc;
+  margin-left: auto;
+}
+
+/* 手动输入 */
+.manual-section {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+  margin-bottom: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.form-label {
+  width: 120rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.form-input-picker {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 32rpx;
+  color: #333;
+}
+
+/* 降级按钮 */
+.fallback-btn {
+  text-align: center;
+  padding: 30rpx;
+}
+
+.fallback-btn text {
+  font-size: 28rpx;
+  color: #667eea;
+  text-decoration: underline;
+}
+
+/* 底部操作栏 */
+.bottom-actions {
+  display: flex;
+  gap: 20rpx;
+  padding: 30rpx;
+  background: #fff;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.btn-cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.btn-confirm {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
