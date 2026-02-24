@@ -22,9 +22,10 @@ App({
       console.error('请使用 2.2.3 或以上的基础库以使用云能力');
     } else {
       wx.cloud.init({
-        env: 'your-env-id', // TODO: 替换为实际的云开发环境ID
+        env: 'cloud1-9g5c8f8e', // 云开发环境ID
         traceUser: true,
       });
+      console.log('云开发环境ID:', 'cloud1-9g5c8f8e');
     }
 
     // 从本地存储恢复用户信息
