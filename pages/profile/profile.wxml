@@ -1,0 +1,81 @@
+<view class="profile-page">
+  <!-- 导航栏 -->
+  <navigation-bar
+    title="个人中心"
+    background="#ffffff"
+    color="#333333"
+    bind:back="goBack"
+  />
+
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <image
+      class="avatar"
+      src="{{userInfo ? userInfo.avatarUrl : ''}}"
+      mode="aspectFill"
+    />
+    <view class="user-info">
+      <text class="nick-name">{{userInfo ? userInfo.nickName : ''}}</text>
+      <text class="remark">{{remark ? '备注：' + remark : '未设置备注'}}</text>
+    </view>
+    <view class="edit-remark" bindtap="editRemark">
+      <text>编辑备注</text>
+    </view>
+  </view>
+
+  <!-- 统计数据 -->
+  <view class="stats-card">
+    <view class="stats-title">我的记账统计</view>
+    <view class="stats-items">
+      <view class="stats-item">
+        <text class="stats-label">累计支出</text>
+        <text class="stats-value">¥{{userStats.totalAmount}}</text>
+      </view>
+      <view class="stats-item">
+        <text class="stats-label">记账笔数</text>
+        <text class="stats-value">{{userStats.totalCount}}</text>
+      </view>
+      <view class="stats-item">
+        <text class="stats-label">本月支出</text>
+        <text class="stats-value">¥{{userStats.monthAmount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-item" bindtap="goToLedgerList">
+      <view class="menu-info">
+        <text class="menu-icon">📒</text>
+        <text class="menu-title">我的账本</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goToRecordList">
+      <view class="menu-info">
+        <text class="menu-icon">📝</text>
+        <text class="menu-title">记账记录</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="menu-item" bindtap="goToStatistics">
+      <view class="menu-info">
+        <text class="menu-icon">📊</text>
+        <text class="menu-title">统计分析</text>
+      </view>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-section">
+    <view class="logout-btn" bindtap="logout">
+      <text>退出登录</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

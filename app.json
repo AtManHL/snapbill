@@ -6,7 +6,9 @@
     "pages/record-list/record-list",
     "pages/record-detail/record-detail",
     "pages/ledger-list/ledger-list",
-    "pages/ledger-create/ledger-create"
+    "pages/ledger-create/ledger-create",
+    "pages/statistics/statistics",
+    "pages/profile/profile"
   ],
   "window": {
     "navigationBarTextStyle": "black",

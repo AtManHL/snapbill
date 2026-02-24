@@ -1,0 +1,83 @@
+.record-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 32rpx;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  transition: background-color 0.2s;
+}
+
+.record-card:active {
+  background-color: #f5f5f5;
+}
+
+.record-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  flex: 1;
+}
+
+.category-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  font-size: 48rpx;
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  flex: 1;
+}
+
+.category-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.record-time {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+.payer-name {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.remark {
+  font-size: 24rpx;
+  color: #999999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8rpx;
+}
+
+.amount {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+}
+
+.date {
+  font-size: 24rpx;
+  color: #999999;
+}

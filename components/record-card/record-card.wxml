@@ -1,0 +1,17 @@
+<view class="record-card" bindtap="onTap">
+  <view class="record-left">
+    <view class="category-icon" style="background-color: {{categoryColor || '#FF6B6B'}};">
+      <text class="icon">{{categoryIcon || '💰'}}</text>
+    </view>
+    <view class="record-info">
+      <text class="category-name">{{categoryName}}</text>
+      <text class="record-time">{{time}}</text>
+      <text wx:if="{{payerName}}" class="payer-name">{{payerName}}</text>
+      <text wx:if="{{remark}}" class="remark">{{remark}}</text>
+    </view>
+  </view>
+  <view class="record-right">
+    <text class="amount">-¥{{amount}}</text>
+    <text class="date">{{date}}</text>
+  </view>
+</view>
