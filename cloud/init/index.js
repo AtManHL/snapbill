@@ -12,7 +12,7 @@ const db = cloud.database();
  * 初始化云函数
  */
 exports.main = async (event, context) => {
-  const { type } = event;
+  const { type } = event || {};
 
   try {
     switch (type) {
@@ -21,10 +21,9 @@ exports.main = async (event, context) => {
       case 'all':
         return await seedAll();
       default:
-        return {
-          success: false,
-          message: '未知的初始化类型'
-        };
+        // 无参数时默认初始化所有数据
+        console.log('未指定type，默认初始化所有数据');
+        return await seedAll();
     }
   } catch (error) {
     console.error('初始化云函数错误:', error);
