@@ -55,19 +55,6 @@ async function seedAll() {
  * 初始化默认分类数据
  */
 async function seedCategories() {
-  // 检查是否已初始化
-  const existingCount = await db.collection('categories').where({
-    isDefault: true
-  }).count();
-
-  if (existingCount.total > 0) {
-    return {
-      success: true,
-      message: '默认分类已存在，无需初始化',
-      count: existingCount.total
-    };
-  }
-
   // 默认分类列表
   const defaultCategories = [
     {
@@ -184,7 +171,8 @@ async function seedCategories() {
         name: category.name
       });
     } catch (error) {
-      console.error('添加分类失败:', category.name, error);
+      // 忽略重复添加的错误（可能已存在）
+      console.log('添加分类跳过:', category.name, error.errMsg);
     }
   }
 
