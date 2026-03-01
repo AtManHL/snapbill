@@ -22,24 +22,24 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   console.log('wxContext:', JSON.stringify(wxContext));
 
-  const { openid, appid } = wxContext || {};
-  console.log('openid:', openid, 'appid:', appid);
+  const { OPENID, APPID } = wxContext || {};
+  console.log('OPENID:', OPENID, 'APPID:', APPID);
 
-  // 检查 openid 是否存在
-  if (!openid) {
-    console.error('openid 为空，无法继续');
+  // 检查 OPENID 是否存在
+  if (!OPENID) {
+    console.error('OPENID 为空，无法继续');
     return {
       success: false,
       message: '获取用户信息失败',
-      error: 'openid is undefined'
+      error: 'OPENID is undefined'
     };
   }
 
   try {
     // 查询用户是否存在
-    console.log('开始查询用户，openid:', openid);
+    console.log('开始查询用户，OPENID:', OPENID);
     const userRes = await db.collection('users').where({
-      _openid: openid,
+      _openid: OPENID,
     }).get();
     console.log('用户查询结果，数量:', userRes.data.length);
 
@@ -52,7 +52,7 @@ exports.main = async (event, context) => {
 
       const createRes = await db.collection('users').add({
         data: {
-          _openid: openid,
+          _openid: OPENID,
           nickName: nickName || '微信用户',
           avatarUrl: avatarUrl || '',
           remark: '',
@@ -66,7 +66,7 @@ exports.main = async (event, context) => {
       isNewUser = true;
 
       // 创建默认账本
-      await createDefaultLedger(userId, openid, nickName || '微信用户');
+      await createDefaultLedger(userId, OPENID, nickName || '微信用户');
     } else {
       console.log('老用户，userId:', userRes.data[0]._id);
       userId = userRes.data[0]._id;
@@ -95,7 +95,7 @@ exports.main = async (event, context) => {
     console.log('=== login云函数完成 ===');
     return {
       success: true,
-      openid,
+      openid: OPENID,
       userId,
       nickName: nickName || '微信用户',
       avatarUrl: avatarUrl || '',
