@@ -4,8 +4,10 @@ import { getMonthStart, getMonthEnd, formatAmount } from '../../utils/date.js';
 
 Page({
   data: {
-    currentLedger: { name: '我的账本' },
+    currentLedger: { name: '我们的小家账本' },
     monthlyTotal: '0.00',
+    dailyAverage: '0.00',
+    recordCount: 0,
     recentRecords: [],
     loading: false,
   },
@@ -102,11 +104,17 @@ Page({
         .get();
 
       const records = recordRes.data || [];
-      const monthlyTotal = this.calculateMonthlyTotal(records);
+      const stats = this.calculateMonthlyStats(records);
+
+      // 为记录添加分类 emoji
+      const recordsWithEmoji = records.map(record => ({
+        ...record,
+        categoryEmoji: this.getCategoryEmoji(record.category),
+      }));
 
       this.setData({
-        recentRecords: records,
-        monthlyTotal,
+        recentRecords: recordsWithEmoji,
+        ...stats,
         loading: false,
       });
     } catch (error) {
@@ -116,11 +124,50 @@ Page({
   },
 
   /**
-   * 计算本月总额
+   * 计算本月统计数据
    */
-  calculateMonthlyTotal(records) {
+  calculateMonthlyStats(records) {
     const total = records.reduce((sum, record) => sum + (record.amount || 0), 0);
-    return total.toFixed(2);
+    const count = records.length;
+    // 计算本月已过天数
+    const today = new Date();
+    const dayOfMonth = today.getDate();
+    const dailyAvg = dayOfMonth > 0 ? (total / dayOfMonth).toFixed(2) : '0.00';
+
+    return {
+      monthlyTotal: total.toFixed(2),
+      recordCount: count,
+      dailyAverage: dailyAvg,
+    };
+  },
+
+  /**
+   * 获取分类 emoji
+   */
+  getCategoryEmoji(category) {
+    const emojiMap = {
+      '餐饮': '🍽',
+      '餐饮美食': '🍽',
+      '购物': '🛒',
+      '日常购物': '🛒',
+      '交通': '🚗',
+      '交通出行': '🚗',
+      '住房': '🏠',
+      '居家住房': '🏠',
+      '医疗': '🏥',
+      '健康医疗': '🏥',
+      '娱乐': '🎬',
+      '休闲娱乐': '🎬',
+      '学习': '📚',
+      '学习成长': '📚',
+      '人情': '💝',
+      '人情往来': '💝',
+      '数码': '📱',
+      '通讯数码': '📱',
+      '其他': '💰',
+      '其他支出': '💰',
+    };
+    return emojiMap[category] || '📦';
   },
 
   /**

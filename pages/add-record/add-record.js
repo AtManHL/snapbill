@@ -6,10 +6,13 @@ import { callCloudFunction, uploadToCloud, showToast, showLoading, hideLoading }
 
 Page({
   data: {
-    uploadMode: 'album', // album: 相册, camera: 拍照
+    uploadMode: 'album',
     imageUrl: '',
     loading: false,
+    isUploading: false,
     categories: [],
+    dateRange: [],
+    timeRange: [],
 
     // AI识别结果
     recognizedData: null,
@@ -33,6 +36,72 @@ Page({
   onLoad() {
     this.loadCategories();
     this.loadCurrentLedger();
+    this.initDateTimeRange();
+  },
+
+  /**
+   * 初始化日期时间范围
+   */
+  initDateTimeRange() {
+    const dates = [];
+    const times = [];
+
+    // 生成年月日选项
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+
+    for (let i = 1; i <= 31; i++) {
+      dates.push(`${month + 1}月${i}日`);
+    }
+
+    for (let h = 0; h < 24; h++) {
+      for (let m = 0; m < 60; m += 5) {
+        times.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+      }
+    }
+
+    this.setData({
+      dateRange: dates,
+      timeRange: times,
+    });
+  },
+
+  /**
+   * 从相册选择图片
+   */
+  chooseImageFromAlbum() {
+    this.setData({ uploadMode: 'album' });
+    this.chooseImage(['album']);
+  },
+
+  /**
+   * 拍照选择图片
+   */
+  chooseImageFromCamera() {
+    this.setData({ uploadMode: 'camera' });
+    this.chooseImage(['camera']);
+  },
+
+  /**
+   * 选择图片
+   */
+  chooseImage(sourceType) {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType,
+      sizeType: ['compressed'],
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].tempFilePath;
+        this.setData({ imageUrl: tempFilePath, isUploading: true });
+        this.recognizeImage(tempFilePath);
+      },
+      fail: (err) => {
+        console.error('选择图片失败:', err);
+        showToast('选择图片失败');
+      },
+    });
   },
 
   /**
@@ -134,6 +203,7 @@ Page({
             merchantName: recognizeRes.merchantName || '',
             originalImageUrl: fileID,
           },
+          isUploading: false,
           loading: false,
         });
 
@@ -142,6 +212,7 @@ Page({
         // 识别失败，显示降级方案
         this.setData({
           showManualInput: true,
+          isUploading: false,
           loading: false,
         });
         showToast('识别失败，请手动输入');
@@ -150,6 +221,7 @@ Page({
       console.error('AI识别失败:', error);
       this.setData({
         showManualInput: true,
+        isUploading: false,
         loading: false,
       });
       showToast('识别失败，请手动输入');

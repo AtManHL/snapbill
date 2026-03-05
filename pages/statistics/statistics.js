@@ -7,7 +7,9 @@ import { CLOUD_FUNCTIONS } from '../../utils/constants.js';
 Page({
   data: {
     currentLedger: null,
-    timeType: 'month', // day, week, month, year
+    timeType: 'month',
+    currentYear: new Date().getFullYear(),
+    currentMonth: new Date().getMonth() + 1,
     startDate: '',
     endDate: '',
     summary: {
@@ -17,7 +19,13 @@ Page({
     },
     categoryData: [],
     dateData: [],
+    memberData: [
+      { name: '小明', amount: 4856, avatar: '👨', percentage: 57.4 },
+      { name: '小红', amount: 3600, avatar: '👩', percentage: 42.6 },
+    ],
     loading: false,
+    colors: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#6366f1'],
+    emojis: ['🍽', '🏠', '🚗', '🛒', '🎬', '💰'],
   },
 
   onLoad() {
@@ -107,9 +115,17 @@ Page({
         this.callStatistics('byDate', currentLedger._id, startDate, endDate),
       ]);
 
+      const { colors, emojis } = this.data;
+      const categoryData = (categoryRes.data || []).map((item, index) => ({
+        ...item,
+        color: colors[index % colors.length],
+        emoji: emojis[index % emojis.length],
+        gradient: `linear-gradient(135deg, ${colors[index % colors.length]}20 0%, ${colors[(index + 1) % colors.length]}20 100%)`,
+      }));
+
       this.setData({
         summary: summaryRes.summary || { total: '0.00', count: 0, avg: '0.00' },
-        categoryData: categoryRes.data || [],
+        categoryData,
         dateData: dateRes.data || [],
         loading: false,
       });
@@ -207,9 +223,8 @@ Page({
         }
       ],
       color: [
-        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
-        '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
-        '#BB8FCE', '#95A5A6'
+        '#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b',
+        '#10b981', '#6366f1', '#8b5cf6', '#f472b6'
       ]
     };
 
