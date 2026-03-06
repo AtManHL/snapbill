@@ -13,7 +13,7 @@
       <text class="search-icon">🔍</text>
       <input
         class="search-input"
-        placeholder="搜索金额、商户或分类"
+        placeholder="搜索金额或分类"
         value="{{keyword}}"
         bindinput="onSearch"
       />
@@ -50,7 +50,7 @@
                 <text class="record-dot">·</text>
                 <text class="record-user">{{record.payerName || '我'}}</text>
               </view>
-              <text class="record-detail">{{record.merchantName || '其他'}} · {{formatTime(record.paymentTime)}}</text>
+              <text class="record-detail">{{formatTime(record.paymentTime)}}</text>
             </view>
             <text class="record-amount">-¥{{record.amount.toFixed(2)}}</text>
           </view>

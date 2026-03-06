@@ -4,13 +4,13 @@
   <view class="header">
     <view class="header-top">
       <view class="header-title">
-        <text class="ledger-name">{{currentLedger.name || '我们的小家账本'}}</text>
-        <text class="month-label">3月账单</text>
-      </view>
-      <view class="header-settings" bindtap="switchLedger">
-        <view class="settings-icon">
-          <text class="icon-gear">⚙</text>
+        <view class="title-row">
+          <text class="ledger-name">{{currentLedger.name || '我们的小家账本'}}</text>
+          <view class="header-settings" bindtap="switchLedger">
+            <text class="icon-gear">⚙</text>
+          </view>
         </view>
+        <text class="month-label">3月账单</text>
       </view>
     </view>
 
@@ -46,9 +46,9 @@
       </view>
       <view class="action-item" bindtap="goToProfile">
         <view class="action-icon pink">
-          <text>👥</text>
+          <text>👤</text>
         </view>
-        <text class="action-label pink-text">成员</text>
+        <text class="action-label pink-text">个人中心</text>
       </view>
     </view>
   </view>
@@ -75,7 +75,7 @@
               <text class="record-dot">·</text>
               <text class="record-user">{{item.payerName || '我'}}</text>
             </view>
-            <text class="record-detail">{{item.merchantName || '其他'}} · {{formatDate(item.paymentTime)}}</text>
+            <text class="record-detail">{{formatDate(item.paymentTime)}}</text>
           </view>
           <text class="record-amount">-¥{{item.amount.toFixed(2)}}</text>
         </view>

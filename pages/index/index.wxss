@@ -16,9 +16,6 @@ page {
 }
 
 .header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 48rpx;
 }
 
@@ -26,6 +23,12 @@ page {
   display: flex;
   flex-direction: column;
   gap: 8rpx;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
 }
 
 .ledger-name {
@@ -43,23 +46,18 @@ page {
 }
 
 .header-settings {
-  width: 80rpx;
-  height: 80rpx;
+  width: 56rpx;
+  height: 56rpx;
   border-radius: 50%;
   background: linear-gradient(135deg, #dbeafe 0%, #e9d5ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.settings-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
 .icon-gear {
-  font-size: 36rpx;
+  font-size: 28rpx;
   color: #3b82f6;
 }
 
