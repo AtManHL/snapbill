@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Login } from './components/Login';
 import { Home } from './components/Home';
 import { AddRecord } from './components/AddRecord';
 import { ConfirmRecord } from './components/ConfirmRecord';
@@ -17,6 +18,7 @@ export interface RecordData {
 }
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [pendingRecord, setPendingRecord] = useState<RecordData | null>(null);
 
@@ -27,7 +29,17 @@ export default function App() {
     setCurrentPage(page);
   };
 
+  const handleLogin = () => {
+    // 模拟登录成功
+    setIsLoggedIn(true);
+  };
+
   const renderPage = () => {
+    // 如果未登录，显示登录页
+    if (!isLoggedIn) {
+      return <Login onLogin={handleLogin} />;
+    }
+
     switch (currentPage) {
       case 'home':
         return <Home onNavigate={navigateTo} />;

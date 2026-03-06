@@ -1,15 +1,61 @@
 <view class="login-page">
-  <!-- Logo和标题 -->
-  <view class="login-header">
-    <view class="logo-wrapper">
-      <text class="logo">💰</text>
+  <!-- 装饰性背景圆圈 -->
+  <view class="bg-circle circle-1"></view>
+  <view class="bg-circle circle-2"></view>
+
+  <!-- 主要内容 -->
+  <view class="login-content">
+    <!-- Logo区域 -->
+    <view class="logo-section">
+      <!-- App图标 -->
+      <view class="app-icon">
+        <text class="icon-camera">📷</text>
+      </view>
+
+      <!-- App名称 -->
+      <text class="app-name">秒拍帐</text>
+
+      <!-- Slogan -->
+      <text class="app-slogan">AI智能记账，让生活更简单</text>
     </view>
-    <text class="app-name">秒拍帐</text>
-    <text class="app-desc">AI识别支付截图，轻松记账</text>
+
+    <!-- 特性展示 -->
+    <view class="features-section">
+      <view class="feature-card">
+        <view class="feature-icon blue">
+          <text>⚡</text>
+        </view>
+        <view class="feature-text">
+          <text class="feature-title">AI识别截图</text>
+          <text class="feature-desc">一秒记账，准确高效</text>
+        </view>
+      </view>
+
+      <view class="feature-card">
+        <view class="feature-icon purple">
+          <text>👥</text>
+        </view>
+        <view class="feature-text">
+          <text class="feature-title">多人共享</text>
+          <text class="feature-desc">家人朋友，账目清晰</text>
+        </view>
+      </view>
+
+      <view class="feature-card">
+        <view class="feature-icon pink">
+          <text>✨</text>
+        </view>
+        <view class="feature-text">
+          <text class="feature-title">智能分析</text>
+          <text class="feature-desc">消费洞察，科学理财</text>
+        </view>
+      </view>
+    </view>
   </view>
 
-  <!-- 登录按钮 -->
-  <view class="login-content">
+  <!-- 底部登录区域 -->
+  <view class="login-footer">
+    <!-- 微信登录按钮 -->
     <button
       class="login-btn"
       wx:if="{{canIUseGetUserProfile}}"
@@ -17,13 +63,13 @@
       disabled="{{loading}}"
     >
       <block wx:if="{{!loading}}">
-        <text class="login-icon">👤</text>
-        <text class="login-text">微信一键登录</text>
+        <text class="wechat-icon">💬</text>
+        <text class="btn-text">微信一键登录</text>
       </block>
       <block wx:else>
         <view class="btn-loading">
           <view class="loading-spinner"></view>
-          <text>登录中...</text>
+          <text class="btn-text">登录中...</text>
         </view>
       </block>
     </button>
@@ -33,15 +79,15 @@
       wx:else
       disabled="{{true}}"
     >
-      <text>您的微信版本过低，请升级后使用</text>
+      <text class="btn-text">您的微信版本过低，请升级后使用</text>
     </button>
-  </view>
 
-  <!-- 用户协议 -->
-  <view class="agreement">
-    <text class="agreement-text">登录即表示同意</text>
-    <text class="agreement-link">《用户协议》</text>
-    <text class="agreement-text">和</text>
-    <text class="agreement-link">《隐私政策》</text>
+    <!-- 协议文案 -->
+    <view class="agreement">
+      <text class="agreement-text">登录即表示同意</text>
+      <text class="agreement-link">用户协议</text>
+      <text class="agreement-text">和</text>
+      <text class="agreement-link">隐私政策</text>
+    </view>
   </view>
 </view>
