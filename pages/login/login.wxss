@@ -159,6 +159,7 @@ page {
   padding: 0 64rpx 96rpx;
   position: relative;
   z-index: 10;
+  box-sizing: border-box;
 }
 
 /* 微信登录按钮 */
@@ -174,7 +175,9 @@ page {
   gap: 16rpx;
   box-shadow: 0 16rpx 48rpx rgba(139, 92, 246, 0.3);
   border: none;
-  margin-bottom: 32rpx;
+  margin: 0 0 32rpx 0;
+  padding: 0;
+  box-sizing: border-box;
   transition: transform 0.2s;
 }
 
@@ -198,6 +201,8 @@ page {
   font-size: 32rpx;
   color: #fff;
   font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-loading {
