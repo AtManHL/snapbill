@@ -18,7 +18,7 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 120rpx;
+  margin-bottom: 80rpx;
 }
 
 .logo-wrapper {
@@ -57,12 +57,13 @@ page {
 /* 登录内容区 */
 .login-content {
   width: 100%;
-  max-width: 600rpx;
+  display: flex;
+  justify-content: center;
 }
 
 /* 登录按钮 */
 .login-btn {
-  width: 100%;
+  width: 560rpx;
   height: 120rpx;
   border-radius: 60rpx;
   background: #ffffff;

@@ -12,7 +12,7 @@ page {
 
 /* 头部区域 */
 .header {
-  padding: 48rpx 48rpx 32rpx;
+  padding: 96rpx 48rpx 32rpx;
 }
 
 .header-top {
