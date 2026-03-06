@@ -7,17 +7,14 @@ Page({
     currentLedgerId: '',
     loading: false,
     showInvite: false,
-    inviteCode: 'A8K9M2',
-    members: [
-      { id: 1, name: '小明', avatar: '👨', role: '创建者' },
-      { id: 2, name: '小红', avatar: '👩', role: '成员' },
-    ],
+    inviteCode: '',
+    members: [],
+    currentLedger: null,
   },
 
   onLoad() {
     this.loadLedgers();
     this.loadCurrentLedger();
-    this.generateInviteCode();
   },
 
   onShow() {
@@ -25,92 +22,10 @@ Page({
   },
 
   /**
-   * 生成邀请码
-   */
-  generateInviteCode() {
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    this.setData({ inviteCode: code });
-  },
-
-  /**
    * 返回上一页
    */
   goBack() {
     wx.navigateBack();
-  },
-
-  /**
-   * 切换邀请码显示
-   */
-  toggleInvite() {
-    this.setData({
-      showInvite: !this.data.showInvite,
-    });
-  },
-
-  /**
-   * 复制邀请码
-   */
-  copyInviteCode() {
-    wx.setClipboardData({
-      data: this.data.inviteCode,
-      success: () => {
-        wx.showToast({
-          title: '复制成功',
-          icon: 'success',
-        });
-      },
-    });
-  },
-
-  /**
-   * 管理账本
-   */
-  manageLedger(e) {
-    const { id } = e.currentTarget.dataset;
-    wx.showToast({
-      title: '账本管理功能开发中',
-      icon: 'none',
-    });
-  },
-
-  /**
-   * 编辑账本信息
-   */
-  editLedgerInfo() {
-    wx.showToast({
-      title: '编辑功能开发中',
-      icon: 'none',
-    });
-  },
-
-  /**
-   * 管理分类
-   */
-  manageCategories() {
-    wx.showToast({
-      title: '分类管理功能开发中',
-      icon: 'none',
-    });
-  },
-
-  /**
-   * 删除账本
-   */
-  deleteLedger() {
-    wx.showModal({
-      title: '确认删除',
-      content: '删除后数据无法恢复，是否继续？',
-      confirmColor: '#dc2626',
-      success: (res) => {
-        if (res.confirm) {
-          wx.showToast({
-            title: '删除功能开发中',
-            icon: 'none',
-          });
-        }
-      },
-    });
   },
 
   /**
@@ -125,10 +40,20 @@ Page({
         data: { action: 'list' },
       });
 
+      const ledgers = res.result.data || [];
       this.setData({
-        ledgers: res.result.data || [],
+        ledgers: ledgers,
         loading: false,
       });
+
+      // 如果有当前账本，加载成员
+      if (this.data.currentLedgerId) {
+        this.loadMembers(this.data.currentLedgerId);
+        const current = ledgers.find(l => l._id === this.data.currentLedgerId);
+        if (current) {
+          this.setData({ currentLedger: current });
+        }
+      }
     } catch (error) {
       console.error('加载账本失败:', error);
       this.setData({ loading: false });
@@ -147,6 +72,29 @@ Page({
       }
     } catch (error) {
       console.error('加载当前账本失败:', error);
+    }
+  },
+
+  /**
+   * 加载账本成员
+   */
+  async loadMembers(ledgerId) {
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'ledger',
+        data: {
+          action: 'getMembers',
+          ledgerId: ledgerId,
+        },
+      });
+
+      if (res.result.success) {
+        this.setData({
+          members: res.result.data || [],
+        });
+      }
+    } catch (error) {
+      console.error('加载成员失败:', error);
     }
   },
 
@@ -219,11 +167,94 @@ Page({
   },
 
   /**
-   * 返回首页
+   * 切换邀请码显示
    */
-  goHome() {
-    wx.reLaunch({
-      url: '/pages/index/index',
+  async toggleInvite() {
+    const newShowInvite = !this.data.showInvite;
+    this.setData({ showInvite: newShowInvite });
+
+    // 如果展开邀请区域，生成新的邀请码
+    if (newShowInvite && this.data.currentLedgerId) {
+      try {
+        const res = await wx.cloud.callFunction({
+          name: 'ledger',
+          data: {
+            action: 'generateInviteCode',
+            ledgerId: this.data.currentLedgerId,
+          },
+        });
+
+        if (res.result.success) {
+          this.setData({ inviteCode: res.result.inviteCode });
+        }
+      } catch (error) {
+        console.error('生成邀请码失败:', error);
+      }
+    }
+  },
+
+  /**
+   * 复制邀请码
+   */
+  copyInviteCode() {
+    wx.setClipboardData({
+      data: this.data.inviteCode,
+      success: () => {
+        wx.showToast({
+          title: '复制成功',
+          icon: 'success',
+        });
+      },
+    });
+  },
+
+  /**
+   * 管理账本
+   */
+  manageLedger(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.showToast({
+      title: '账本管理功能开发中',
+      icon: 'none',
+    });
+  },
+
+  /**
+   * 编辑账本信息
+   */
+  editLedgerInfo() {
+    wx.showToast({
+      title: '编辑功能开发中',
+      icon: 'none',
+    });
+  },
+
+  /**
+   * 管理分类
+   */
+  manageCategories() {
+    wx.showToast({
+      title: '分类管理功能开发中',
+      icon: 'none',
+    });
+  },
+
+  /**
+   * 删除账本
+   */
+  deleteLedger() {
+    wx.showModal({
+      title: '确认删除',
+      content: '删除后数据无法恢复，是否继续？',
+      confirmColor: '#dc2626',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showToast({
+            title: '删除功能开发中',
+            icon: 'none',
+          });
+        }
+      },
     });
   },
 });

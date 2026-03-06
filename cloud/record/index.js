@@ -55,12 +55,24 @@ async function addRecord(event, openid) {
     categoryId,
     categoryName,
     paymentTime,
+    payerName,
     merchantName,
     remark,
     isAIEstimated,
     originalImageUrl,
     thumbnailUrl,
   } = event;
+
+  // 获取用户昵称作为 payerName
+  let payerNameToSave = payerName;
+  if (!payerNameToSave) {
+    const userRes = await db.collection('users').where({ _openid: openid }).get();
+    if (userRes.data.length > 0) {
+      payerNameToSave = userRes.data[0].nickName || '我';
+    } else {
+      payerNameToSave = '我';
+    }
+  }
 
   const result = await db.collection('records').add({
     data: {
@@ -71,6 +83,7 @@ async function addRecord(event, openid) {
       categoryName,
       paymentTime: new Date(paymentTime),
       payerId: openid,
+      payerName: payerNameToSave,
       merchantName: merchantName || '',
       remark: remark || '',
       isAIEstimated: isAIEstimated || false,
@@ -162,7 +175,6 @@ async function listRecords(event, openid) {
 
   let query = db.collection('records').where({
     ledgerId,
-    payerId: openid,
   });
 
   // 添加筛选条件
@@ -207,11 +219,9 @@ async function searchRecords(event, openid) {
   const result = await db.collection('records')
     .where({
       ledgerId,
-      payerId: openid,
       _.or([
-        { merchantName: db.RegExp({ regexp: keyword, options: 'i' }) },
-        { remark: db.RegExp({ regexp: keyword, options: 'i' }) },
         { categoryName: db.RegExp({ regexp: keyword, options: 'i' }) },
+        { remark: db.RegExp({ regexp: keyword, options: 'i' }) },
       ]),
     })
     .orderBy('paymentTime', 'desc')

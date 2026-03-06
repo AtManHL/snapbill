@@ -21,6 +21,8 @@ exports.main = async (event, context) => {
         return await statisticsByCategory(ledgerId, startDate, endDate);
       case 'byDate':
         return await statisticsByDate(ledgerId, startDate, endDate);
+      case 'byUser':
+        return await statisticsByUser(ledgerId, startDate, endDate);
       case 'summary':
         return await statisticsSummary(ledgerId, startDate, endDate);
       default:
@@ -126,6 +128,59 @@ async function statisticsByDate(ledgerId, startDate, endDate) {
 }
 
 /**
+ * 按用户统计（成员统计）
+ */
+async function statisticsByUser(ledgerId, startDate, endDate) {
+  let collection = db.collection('records').where({ ledgerId });
+
+  if (startDate) {
+    collection = collection.where({
+      paymentTime: _.gte(new Date(startDate)),
+    });
+  }
+  if (endDate) {
+    collection = collection.where({
+      paymentTime: _.lte(new Date(endDate)),
+    });
+  }
+
+  const records = await collection.get();
+  const data = records.data;
+
+  // 按用户汇总
+  const userMap = {};
+  let total = 0;
+
+  data.forEach(record => {
+    const { payerId, payerName, amount } = record;
+    if (!userMap[payerId]) {
+      userMap[payerId] = {
+        id: payerId,
+        name: payerName || '微信用户',
+        avatar: '👤',
+        amount: 0,
+        count: 0,
+      };
+    }
+    userMap[payerId].amount += amount;
+    userMap[payerId].count += 1;
+    total += amount;
+  });
+
+  // 转换为数组并计算占比
+  const result = Object.values(userMap).map(item => ({
+    ...item,
+    percentage: total > 0 ? (item.amount / total * 100).toFixed(1) : 0,
+  })).sort((a, b) => b.amount - a.amount);
+
+  return {
+    success: true,
+    data: result,
+    total: total.toFixed(2),
+  };
+}
+
+/**
  * 统计汇总
  */
 async function statisticsSummary(ledgerId, startDate, endDate) {
@@ -149,19 +204,6 @@ async function statisticsSummary(ledgerId, startDate, endDate) {
   const count = data.length;
   const avg = count > 0 ? total / count : 0;
 
-  // 按月汇总
-  const monthMap = {};
-  data.forEach(record => {
-    const date = new Date(record.paymentTime);
-    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-
-    if (!monthMap[monthKey]) {
-      monthMap[monthKey] = { month: monthKey, amount: 0, count: 0 };
-    }
-    monthMap[monthKey].amount += record.amount;
-    monthMap[monthKey].count += 1;
-  });
-
   return {
     success: true,
     summary: {
@@ -169,6 +211,5 @@ async function statisticsSummary(ledgerId, startDate, endDate) {
       count,
       avg: avg.toFixed(2),
     },
-    byMonth: Object.values(monthMap),
   };
 }
