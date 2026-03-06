@@ -6,15 +6,111 @@ Page({
     ledgers: [],
     currentLedgerId: '',
     loading: false,
+    showInvite: false,
+    inviteCode: 'A8K9M2',
+    members: [
+      { id: 1, name: '小明', avatar: '👨', role: '创建者' },
+      { id: 2, name: '小红', avatar: '👩', role: '成员' },
+    ],
   },
 
   onLoad() {
     this.loadLedgers();
     this.loadCurrentLedger();
+    this.generateInviteCode();
   },
 
   onShow() {
     this.loadLedgers();
+  },
+
+  /**
+   * 生成邀请码
+   */
+  generateInviteCode() {
+    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+    this.setData({ inviteCode: code });
+  },
+
+  /**
+   * 返回上一页
+   */
+  goBack() {
+    wx.navigateBack();
+  },
+
+  /**
+   * 切换邀请码显示
+   */
+  toggleInvite() {
+    this.setData({
+      showInvite: !this.data.showInvite,
+    });
+  },
+
+  /**
+   * 复制邀请码
+   */
+  copyInviteCode() {
+    wx.setClipboardData({
+      data: this.data.inviteCode,
+      success: () => {
+        wx.showToast({
+          title: '复制成功',
+          icon: 'success',
+        });
+      },
+    });
+  },
+
+  /**
+   * 管理账本
+   */
+  manageLedger(e) {
+    const { id } = e.currentTarget.dataset;
+    wx.showToast({
+      title: '账本管理功能开发中',
+      icon: 'none',
+    });
+  },
+
+  /**
+   * 编辑账本信息
+   */
+  editLedgerInfo() {
+    wx.showToast({
+      title: '编辑功能开发中',
+      icon: 'none',
+    });
+  },
+
+  /**
+   * 管理分类
+   */
+  manageCategories() {
+    wx.showToast({
+      title: '分类管理功能开发中',
+      icon: 'none',
+    });
+  },
+
+  /**
+   * 删除账本
+   */
+  deleteLedger() {
+    wx.showModal({
+      title: '确认删除',
+      content: '删除后数据无法恢复，是否继续？',
+      confirmColor: '#dc2626',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showToast({
+            title: '删除功能开发中',
+            icon: 'none',
+          });
+        }
+      },
+    });
   },
 
   /**

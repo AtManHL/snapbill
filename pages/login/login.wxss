@@ -18,7 +18,7 @@ page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 80rpx;
+  margin-bottom: 120rpx;
 }
 
 .logo-wrapper {
@@ -63,19 +63,16 @@ page {
 /* 登录按钮 */
 .login-btn {
   width: 100%;
-  height: 112rpx;
-  border-radius: 32rpx;
-  background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+  height: 120rpx;
+  border-radius: 60rpx;
+  background: #ffffff;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 16rpx;
-  font-size: 32rpx;
-  color: #3b82f6;
-  font-weight: 600;
+  gap: 20rpx;
   box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.2);
   border: none;
-  margin-bottom: 48rpx;
   transition: transform 0.2s;
 }
 
@@ -85,7 +82,7 @@ page {
 
 .login-btn:active {
   transform: scale(0.98);
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: #f3f4f6;
 }
 
 .login-btn[disabled] {
@@ -93,14 +90,31 @@ page {
 }
 
 .login-icon {
-  font-size: 40rpx;
+  font-size: 44rpx;
+  flex-shrink: 0;
+}
+
+.login-text {
+  font-size: 34rpx;
+  color: #3b82f6;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1;
 }
 
 .btn-loading {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 16rpx;
+}
+
+.btn-loading text {
+  font-size: 32rpx;
+  color: #3b82f6;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .loading-spinner {
@@ -110,6 +124,7 @@ page {
   border: 4rpx solid #dbeafe;
   border-top-color: #3b82f6;
   animation: spin 1s linear infinite;
+  flex-shrink: 0;
 }
 
 @keyframes spin {
@@ -123,65 +138,6 @@ page {
   background: rgba(255, 255, 255, 0.3);
   color: rgba(255, 255, 255, 0.8);
   font-size: 28rpx;
-}
-
-/* 功能说明卡片 */
-.features-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 40rpx 32rpx;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 32rpx;
-  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(16rpx);
-}
-
-.feature-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16rpx;
-  flex: 1;
-}
-
-.feature-icon-wrapper {
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
-}
-
-.feature-icon-wrapper.blue {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-}
-
-.feature-icon-wrapper.purple {
-  background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
-}
-
-.feature-icon-wrapper.pink {
-  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-}
-
-.feature-icon {
-  font-size: 44rpx;
-  line-height: 1;
-}
-
-.feature-text {
-  font-size: 26rpx;
-  color: #4b5563;
-  font-weight: 500;
-}
-
-.divider {
-  width: 2rpx;
-  height: 80rpx;
-  background: linear-gradient(180deg, transparent 0%, #e5e7eb 50%, transparent 100%);
 }
 
 /* 用户协议 */

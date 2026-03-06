@@ -1,47 +1,129 @@
-<!-- pages/ledger-list/ledger-list.wxml -->
-<navigation-bar title="我的账本" back="{{true}}" color="black" background="#FFF">
-  <view slot="right" class="nav-right">
-    <text class="nav-icon" bindtap="createLedger">➕</text>
+<view class="ledger-page">
+  <!-- 导航栏 -->
+  <view class="nav-header">
+    <view class="nav-back" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <text class="nav-title">账本管理</text>
   </view>
-</navigation-bar>
 
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="ledger-list-container">
-    <!-- 账本列表 -->
-    <view class="ledger-items" wx:if="{{ledgers.length > 0}}">
-      <view
-        class="ledger-item {{item._id === currentLedgerId ? 'active' : ''}}"
-        wx:for="{{ledgers}}"
-        wx:key="_id"
-        bindtap="selectLedger"
-        data-id="{{item._id}}"
-      >
-        <view class="ledger-icon">{{item.name.charAt(0)}}</view>
-        <view class="ledger-info">
-          <text class="ledger-name">{{item.name}}</text>
-          <text class="ledger-desc" wx:if="{{item.description}}">{{item.description}}</text>
-          <text class="ledger-hint" wx:if="{{item._id === currentLedgerId}}">当前使用</text>
+  <scroll-view class="content-scroll" scroll-y>
+    <!-- 我的账本 -->
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">我的账本</text>
+        <view class="create-btn" bindtap="createLedger">
+          <text class="create-icon">+</text>
+          <text>创建</text>
         </view>
-        <view class="ledger-action">
-          <text class="current-tag" wx:if="{{item._id === currentLedgerId}}">当前</text>
-          <text class="ledger-arrow">›</text>
+      </view>
+
+      <view class="ledger-list" wx:if="{{ledgers.length > 0}}">
+        <view
+          class="ledger-card {{item._id === currentLedgerId ? 'active' : ''}}"
+          wx:for="{{ledgers}}"
+          wx:key="_id"
+          bindtap="selectLedger"
+          data-id="{{item._id}}"
+        >
+          <view class="ledger-card-header">
+            <view class="ledger-info">
+              <text class="ledger-name">{{item.name}}</text>
+              <view class="ledger-meta">
+                <text class="meta-icon">👥</text>
+                <text class="meta-text">{{item.memberCount || 1}}位成员</text>
+              </view>
+            </view>
+            <view class="current-badge" wx:if="{{item._id === currentLedgerId}}">当前</view>
+          </view>
+          <view class="ledger-card-footer">
+            <text class="expense-label">总支出</text>
+            <text class="expense-amount">¥{{item.totalAmount || 0}}</text>
+            <text class="manage-link" bindtap="manageLedger" data-id="{{item._id}}">管理 ›</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:else>
+        <text class="empty-icon">📒</text>
+        <text class="empty-title">暂无账本</text>
+        <text class="empty-hint">点击上方创建按钮</text>
+      </view>
+    </view>
+
+    <!-- 账本成员 -->
+    <view class="section" wx:if="{{currentLedgerId}}">
+      <view class="section-header">
+        <text class="section-title">账本成员</text>
+        <view class="invite-btn" bindtap="toggleInvite">
+          <text class="invite-icon">↗</text>
+          <text>邀请</text>
+        </view>
+      </view>
+
+      <!-- 邀请码 -->
+      <view class="invite-card" wx:if="{{showInvite}}">
+        <text class="invite-tip">分享邀请码给微信好友加入账本</text>
+        <view class="invite-code-wrapper">
+          <view class="code-box">
+            <text class="code-text">{{inviteCode}}</text>
+          </view>
+          <view class="copy-btn" bindtap="copyInviteCode">
+            <text>复制</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 成员列表 -->
+      <view class="member-list">
+        <view class="member-card" wx:for="{{members}}" wx:key="id">
+          <view class="member-avatar">
+            <text>{{item.avatar || '👤'}}</text>
+          </view>
+          <view class="member-info">
+            <text class="member-name">{{item.name}}</text>
+            <text class="member-role">{{item.role}}</text>
+          </view>
         </view>
       </view>
     </view>
 
-    <!-- 空状态 -->
-    <view class="empty-state" wx:else>
-      <text class="empty-icon">📒</text>
-      <text class="empty-text">暂无账本</text>
-      <text class="empty-hint">点击右上角"+"创建新账本</text>
-      <view class="empty-btn" bindtap="createLedger">
-        <text>创建账本</text>
+    <!-- 账本设置 -->
+    <view class="section" wx:if="{{currentLedgerId}}">
+      <text class="section-title-single">账本设置</text>
+      <view class="settings-list">
+        <view class="setting-item" bindtap="editLedgerInfo">
+          <view class="setting-icon blue">
+            <text>⚙</text>
+          </view>
+          <text class="setting-title">账本信息</text>
+          <text class="setting-arrow">›</text>
+        </view>
+
+        <view class="setting-item" bindtap="manageCategories">
+          <view class="setting-icon purple">
+            <text>🏷</text>
+          </view>
+          <text class="setting-title">分类管理</text>
+          <text class="setting-arrow">›</text>
+        </view>
+
+        <view class="setting-item delete" bindtap="deleteLedger">
+          <view class="setting-icon red">
+            <text>🗑</text>
+          </view>
+          <text class="setting-title delete-text">删除账本</text>
+        </view>
       </view>
     </view>
-  </view>
-</scroll-view>
+  </scroll-view>
 
-<!-- 加载状态 -->
-<view class="loading-mask" wx:if="{{loading}}">
-  <text class="loading-text">加载中...</text>
+  <!-- 加载状态 -->
+  <view class="loading-overlay" wx:if="{{loading}}">
+    <view class="loading-content">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+  </view>
 </view>
