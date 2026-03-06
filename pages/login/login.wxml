@@ -1,10 +1,9 @@
-<!-- pages/login/login.wxml -->
-<navigation-bar title="秒拍帐" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-
-<view class="login-container">
+<view class="login-page">
   <!-- Logo和标题 -->
   <view class="login-header">
-    <view class="logo">💰</view>
+    <view class="logo-wrapper">
+      <text class="logo">💰</text>
+    </view>
     <text class="app-name">秒拍帐</text>
     <text class="app-desc">AI识别支付截图，轻松记账</text>
   </view>
@@ -22,30 +21,41 @@
         <text>微信授权登录</text>
       </block>
       <block wx:else>
-        <text>登录中...</text>
+        <view class="btn-loading">
+          <view class="loading-spinner"></view>
+          <text>登录中...</text>
+        </view>
       </block>
     </button>
 
     <button
-      class="login-btn"
+      class="login-btn disabled"
       wx:else
       disabled="{{true}}"
     >
       <text>您的微信版本过低，请升级后使用</text>
     </button>
 
-    <!-- 功能说明 -->
-    <view class="features">
+    <!-- 功能说明卡片 -->
+    <view class="features-card">
       <view class="feature-item">
-        <text class="feature-icon">📷</text>
+        <view class="feature-icon-wrapper blue">
+          <text class="feature-icon">📷</text>
+        </view>
         <text class="feature-text">上传支付截图</text>
       </view>
+      <view class="divider"></view>
       <view class="feature-item">
-        <text class="feature-icon">🤖</text>
+        <view class="feature-icon-wrapper purple">
+          <text class="feature-icon">🤖</text>
+        </view>
         <text class="feature-text">AI自动识别</text>
       </view>
+      <view class="divider"></view>
       <view class="feature-item">
-        <text class="feature-icon">📝</text>
+        <view class="feature-icon-wrapper pink">
+          <text class="feature-icon">📝</text>
+        </view>
         <text class="feature-text">一键完成记账</text>
       </view>
     </view>
@@ -53,9 +63,9 @@
 
   <!-- 用户协议 -->
   <view class="agreement">
-    <text>登录即表示同意</text>
-    <text class="link">《用户协议》</text>
-    <text>和</text>
-    <text class="link">《隐私政策》</text>
+    <text class="agreement-text">登录即表示同意</text>
+    <text class="agreement-link">《用户协议》</text>
+    <text class="agreement-text">和</text>
+    <text class="agreement-link">《隐私政策》</text>
   </view>
 </view>
