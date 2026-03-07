@@ -76,6 +76,7 @@
   _id: string,              // 关系ID
   ledgerId: string,         // 账本ID
   userId: string,           // 用户openid
+  userName: string,         // 用户昵称（冗余存储，避免关联查询）
   role: string,             // 角色：owner(创建者) | member(成员)
   joinTime: Date,           // 加入时间
 }

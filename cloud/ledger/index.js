@@ -58,6 +58,10 @@ exports.main = async (event, context) => {
 async function createLedger(event, openid) {
   const { name, description } = event;
 
+  // 获取用户信息
+  const userRes = await db.collection('users').where({ _openid: openid }).get();
+  const userName = userRes.data[0]?.nickName || '微信用户';
+
   // 创建账本
   const ledgerRes = await db.collection('ledgers').add({
     data: {
@@ -77,14 +81,24 @@ async function createLedger(event, openid) {
     data: {
       ledgerId: ledgerRes._id,
       userId: openid,
+      userName: userName,
       role: 'owner',
       joinTime: new Date(),
+    },
+  });
+
+  // 自动切换到新创建的账本
+  await db.collection('users').doc(userRes.data[0]._id).update({
+    data: {
+      currentLedgerId: ledgerRes._id,
+      updateTime: new Date(),
     },
   });
 
   return {
     success: true,
     _id: ledgerRes._id,
+    ledgerId: ledgerRes._id,
   };
 }
 
@@ -249,7 +263,7 @@ async function switchLedger(event, openid) {
 }
 
 /**
- * 获取当前账本
+ * 获取当前账本（带验证和自动切换）
  */
 async function getCurrentLedger(openid) {
   const userRes = await db.collection('users')
@@ -260,16 +274,85 @@ async function getCurrentLedger(openid) {
     return { success: false, message: '用户不存在' };
   }
 
-  const { currentLedgerId } = userRes.data[0];
-  if (!currentLedgerId) {
-    return { success: false, message: '未设置当前账本' };
+  const user = userRes.data[0];
+  let { currentLedgerId } = user;
+
+  // 验证当前账本是否有效
+  let currentLedger = null;
+  let isValid = false;
+
+  if (currentLedgerId) {
+    try {
+      const ledger = await db.collection('ledgers').doc(currentLedgerId).get();
+
+      // 检查账本是否存在且未被删除
+      if (ledger.data && !ledger.data.isDeleted) {
+        // 检查用户是否仍是成员
+        const memberRes = await db.collection('ledgerMembers')
+          .where({
+            ledgerId: currentLedgerId,
+            userId: openid,
+          })
+          .get();
+
+        if (memberRes.data.length > 0) {
+          currentLedger = ledger.data;
+          isValid = true;
+        }
+      }
+    } catch (e) {
+      console.log('当前账本验证失败:', e);
+    }
   }
 
-  const ledger = await db.collection('ledgers').doc(currentLedgerId).get();
+  // 如果当前账本无效，尝试切换到第一个可用账本
+  if (!isValid) {
+    console.log('当前账本无效，尝试切换...');
+
+    // 获取用户的所有账本成员关系
+    const memberRes = await db.collection('ledgerMembers')
+      .where({ userId: openid })
+      .orderBy('joinTime', 'asc')
+      .get();
+
+    // 查找第一个有效的账本
+    for (const member of memberRes.data) {
+      try {
+        const ledger = await db.collection('ledgers').doc(member.ledgerId).get();
+        if (ledger.data && !ledger.data.isDeleted) {
+          currentLedgerId = member.ledgerId;
+          currentLedger = ledger.data;
+          isValid = true;
+
+          // 更新用户的当前账本
+          await db.collection('users').doc(user._id).update({
+            data: {
+              currentLedgerId: currentLedgerId,
+              updateTime: new Date(),
+            },
+          });
+          console.log('已自动切换到账本:', currentLedgerId);
+          break;
+        }
+      } catch (e) {
+        console.log('账本查询失败:', e);
+      }
+    }
+  }
+
+  if (!isValid) {
+    return {
+      success: false,
+      code: 'NO_VALID_LEDGER',
+      message: '没有可用的账本，请创建或加入账本',
+    };
+  }
 
   return {
     success: true,
-    ledger: ledger.data,
+    ledger: currentLedger,
+    ledgerId: currentLedgerId,
+    isSwitched: !user.currentLedgerId || user.currentLedgerId !== currentLedgerId,
   };
 }
 
@@ -296,21 +379,15 @@ async function getLedgerMembers(event, openid) {
     .where({ ledgerId: ledgerId })
     .get();
 
-  // 获取用户信息
-  const members = await Promise.all(allMembers.data.map(async (member) => {
-    const userRes = await db.collection('users')
-      .where({ _openid: member.userId })
-      .get();
-
-    const user = userRes.data[0] || {};
-
+  // 直接使用 ledgerMembers 中的 userName，无需查询 users 表
+  const members = allMembers.data.map((member) => {
     return {
       id: member.userId,
-      name: user.nickName || '微信用户',
+      name: member.userName || '微信用户',
       avatar: '👤',
       role: member.role === 'owner' ? '创建者' : '成员',
     };
-  }));
+  });
 
   return {
     success: true,
@@ -377,11 +454,16 @@ async function joinByInviteCode(event, openid) {
     return { success: false, message: '您已是该账本成员' };
   }
 
+  // 获取用户信息
+  const userRes = await db.collection('users').where({ _openid: openid }).get();
+  const userName = userRes.data[0]?.nickName || '微信用户';
+
   // 添加成员关系
   await db.collection('ledgerMembers').add({
     data: {
       ledgerId: ledger._id,
       userId: openid,
+      userName: userName,
       role: 'member',
       joinTime: new Date(),
     },

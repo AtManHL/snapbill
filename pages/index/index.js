@@ -45,23 +45,31 @@ Page({
    */
   async loadCurrentLedger() {
     try {
-      if (!app.globalData.userInfo?.currentLedgerId) {
-        return;
-      }
-
       this.setData({ loading: true });
 
-      const db = wx.cloud.database();
-      const ledgerRes = await db.collection('ledgers')
-        .doc(app.globalData.userInfo.currentLedgerId)
-        .get();
+      const res = await wx.cloud.callFunction({
+        name: 'ledger',
+        data: { action: 'getCurrent' },
+      });
 
-      if (ledgerRes.data) {
+      if (res.result.success) {
         this.setData({
-          currentLedger: ledgerRes.data,
+          currentLedger: res.result.ledger,
         });
         // 保存到全局
-        app.globalData.currentLedger = ledgerRes.data;
+        app.globalData.currentLedger = res.result.ledger;
+        app.globalData.userInfo.currentLedgerId = res.result.ledgerId;
+
+        // 如果发生了自动切换，提示用户
+        if (res.result.isSwitched) {
+          console.log('已自动切换到账本:', res.result.ledger.name);
+        }
+      } else if (res.result.code === 'NO_VALID_LEDGER') {
+        // 没有可用账本，提示用户创建
+        console.log('没有可用账本');
+        this.setData({
+          currentLedger: { name: '未选择账本' },
+        });
       }
 
       this.setData({ loading: false });
