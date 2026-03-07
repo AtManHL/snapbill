@@ -133,6 +133,18 @@ async function createDefaultLedger(userId, openid, nickName) {
   });
   console.log('账本创建成功，ledgerId:', ledgerRes._id);
 
+  // 添加账本成员记录
+  await db.collection('ledgerMembers').add({
+    data: {
+      ledgerId: ledgerRes._id,
+      userId: openid,
+      userName: nickName,
+      role: 'owner',
+      joinTime: db.serverDate(),
+    },
+  });
+  console.log('账本成员记录添加成功');
+
   // 更新用户的当前账本ID
   await db.collection('users').doc(userId).update({
     data: {
